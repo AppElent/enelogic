@@ -1,3 +1,5 @@
+import Enelogic from './Enelogic';
+
 export class C {
   private x = 10;
   public getX = () => this.x;
@@ -14,3 +16,5 @@ export function sum(a: number, b: number): number {
 
     return (a+b)
 }
+
+export default Enelogic;
