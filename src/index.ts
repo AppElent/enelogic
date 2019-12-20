@@ -1,4 +1,4 @@
-import Enelogic from './Enelogic';
+export {default} from './Enelogic';
 
 export class C {
   private x = 10;
@@ -11,10 +11,6 @@ export class C {
 export let x = new C();
 export let y = { ...{ some: 'value' } };
 
-
 export function sum(a: number, b: number): number {
-
-    return (a+b)
+  return a + b;
 }
-
-export default Enelogic;

@@ -1,6 +1,6 @@
 {
   "name": "node-enelogic",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Enelogic SDK",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
