@@ -1,13 +1,13 @@
 import moment from 'moment';
 import fetch from 'node-fetch';
 
-interface IEnelogicOptions {
+interface EnelogicOptions {
   startLaag?: number;
   startHoog?: number;
   weekendLaag?: boolean;
 }
 
-interface IEnelogicReturnObject {
+interface EnelogicReturnObject {
   consumption_180?: number;
   consumption_181?: number;
   consumption_182?: number;
@@ -25,6 +25,7 @@ export default class Enelogic {
     this.API_KEY = API_KEY;
   }
 
+  // eslint-disable-next-line
   public fetchEnelogic = async (url: string, options?: any) => {
     if (!url.toLowerCase().startsWith('http')) {
       url = this.HOST + url;
@@ -40,22 +41,26 @@ export default class Enelogic {
     return data;
   };
 
+  // eslint-disable-next-line
   public getMeasuringPoints = async () =>
     this.fetchEnelogic(this.HOST + '/measuringpoints?access_token=' + this.API_KEY, {}).catch(err => ({
       message: err,
       success: false,
     }));
 
+  // eslint-disable-next-line
   public getMeasuringPointsGas = async () => {
     const data = await this.getMeasuringPoints();
     return data.filter(line => line.unitType === 1);
   };
 
+  // eslint-disable-next-line
   public getMeasuringPointsElectricity = async () => {
     const data = await this.getMeasuringPoints();
     return data.filter(line => line.unitType === 0);
   };
 
+  // eslint-disable-next-line
   public formatData = (results, data, accessor = 'date') => {
     for (const line of data) {
       const index = results.findIndex(e => e.datetime === line[accessor]);
@@ -69,7 +74,8 @@ export default class Enelogic {
     return results;
   };
 
-  public addHoogLaagInfo = (results, period: PeriodType, options: IEnelogicOptions = {}) => {
+  // eslint-disable-next-line
+  public addHoogLaagInfo = (results, period: PeriodType, options: EnelogicOptions = {}) => {
     let previous = results[0];
     for (const entry of results) {
       const index = results.findIndex(e => e.datetime === entry.datetime);
@@ -133,6 +139,7 @@ export default class Enelogic {
     return results;
   };
 
+  // eslint-disable-next-line
   public getData = async (datefrom, dateto, period: PeriodType, options) => {
     if (!['DAY', 'QUARTER_OF_AN_HOUR', 'MONTH'].includes(period)) {
       throw new Error('You have to specify period (string) as DAY or QUARTER_OF_AN_HOUR or MONTH. Given: ' + period);
@@ -167,6 +174,7 @@ export default class Enelogic {
     return data;
   };
 
+  // eslint-disable-next-line
   public getFormattedData = async (datefrom, dateto, period, options) => {
     let results = [];
     const enelogicperiod = period === 'YEAR' ? 'MONTH' : period;
@@ -184,6 +192,7 @@ export default class Enelogic {
     return results;
   };
 
+  // eslint-disable-next-line
   public getYearConsumption = async options => {
     const datapointUrl =
       this.HOST +
@@ -200,7 +209,7 @@ export default class Enelogic {
     const data = await this.fetchEnelogic(datapointUrl);
     const beginstanden = data.slice(0, 4);
     const eindstanden = data.slice(Math.max(data.length - 4, 1));
-    const returnObject: IEnelogicReturnObject = {};
+    const returnObject: EnelogicReturnObject = {};
     beginstanden.forEach(stand => {
       returnObject['start_' + stand.rate] = stand.quantity;
     });
@@ -208,7 +217,9 @@ export default class Enelogic {
       returnObject['end_' + stand.rate] = stand.quantity;
       returnObject['consumption_' + stand.rate] = stand.quantity - returnObject['start_' + stand.rate];
     });
+    // eslint-disable-next-line @typescript-eslint/camelcase
     returnObject.consumption_180 = returnObject.consumption_181 + returnObject.consumption_182;
+    // eslint-disable-next-line @typescript-eslint/camelcase
     returnObject.consumption_280 = returnObject.consumption_281 + returnObject.consumption_282;
     return returnObject;
   };
