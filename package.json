@@ -1,5 +1,5 @@
 {
-  "name": "node-enelogic",
+  "name": "enelogic",
   "version": "0.1.6",
   "description": "Enelogic SDK",
   "main": "lib/index.js",
