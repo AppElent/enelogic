@@ -1,5 +1,5 @@
 import moment from 'moment';
-import fetch from 'node-fetch';
+import axios, { AxiosRequestConfig } from 'axios';
 
 interface EnelogicOptions {
   startLaag?: number;
@@ -26,18 +26,18 @@ export default class Enelogic {
   }
 
   // eslint-disable-next-line
-  public fetchEnelogic = async (url: string, options?: any) => {
+  public fetchEnelogic = async (url: string, options?: AxiosRequestConfig) => {
     if (!url.toLowerCase().startsWith('http')) {
       url = this.HOST + url;
     }
-    const response = await fetch(url, options);
+    const response = await axios.get(url, options);
     if (response.status !== 200) {
       // console.log(response);
       throw new Error(
         'Error fetching enelogic data from URL ' + url + ': ' + response.status + ' - ' + response.statusText,
       );
     }
-    const data = await response.json();
+    const data = await response.data;
     return data;
   };
 
